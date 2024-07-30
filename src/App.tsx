@@ -21,8 +21,7 @@ function App() {
       </h1>
       <h1 className="text-pink-500">Tester Text</h1>
       <h1 className="text-orange-500">Testing for Yemi</h1>
-      <p className="text-green-400">hello hi</p>
-      <p className="text-blue-400">hello hi</p>
+
       <div className="card">
         <button onClick={() => setCount((count) => count + 2)}>
           count is now {count}
