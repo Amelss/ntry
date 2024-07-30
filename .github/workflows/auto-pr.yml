@@ -1,30 +1,28 @@
+name: Auto PR to Dev
+
 on:
   push:
     branches:
-      - main
+      - 'staging/**'
 
 jobs:
-  updateAuthor:
+  create-pull-request:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: extract git commit data
-        uses: rlespinasse/git-commit-data-action@v1.x
-
-      - name: Update author information
-        run: echo ${{ env.GIT_COMMIT_AUTHOR_NAME }} > AUTHOR
-
-      - name: Raise PR
-        uses: peter-evans/create-pull-request@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
         with:
-          branch: "auto-pr-branch"
-          base: main
-          title: Update author information
-          committer: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }} ">
-          author: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }} ">
-          body: This is to show automatic PR creation
+          fetch-depth: 0
 
-          token: ${{ secrets.GIT_TOKEN }}
-          delete-branch: true
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: dev
+          title: 'Sync staging changes to dev'
+          body: 'This PR is automatically generated to sync changes from staging to dev.'
+          base: dev
+          head: ${{ github.ref_name }}
+          draft: false
+
+          
